@@ -27,6 +27,8 @@ router.get('/spent-in-last-30-days', authenticateToken, (req, res) => visControl
 //=================================================================================================
 router.get('/spent-in-last-12-months', authenticateToken, (req, res) => visController.getSpentLast12Months(req, res));
 //=================================================================================================
+//updates
+router.get('/income-by-source', authenticateToken, (req, res) => visController.getIncomeBySource(req, res));
 
 export default router;
 

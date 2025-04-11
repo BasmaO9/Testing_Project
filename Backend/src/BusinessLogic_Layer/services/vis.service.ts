@@ -122,4 +122,37 @@ export class VisService {
         return transactions.reduce((sum, t) => sum + t.amount, 0); 
     }
 //=================================================================================================
+//updates
+
+async getIncomeBySource(userId: string): Promise<{ category: string; total: number }[]> {
+    if (!userId) throw new Error("User ID is required");
+
+    const result = await Transaction.aggregate([
+        { $match: { userId: new mongoose.Types.ObjectId(userId), type: "income" } },
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryInfo"
+            }
+        },
+        { $unwind: "$categoryInfo" },
+        {
+            $group: {
+                _id: "$categoryInfo.category",
+                total: { $sum: "$amount" }
+            }
+        },
+        {
+            $project: {
+                category: "$_id",
+                total: 1,
+                _id: 0
+            }
+        }
+    ]);
+
+    return result;
+}
 }

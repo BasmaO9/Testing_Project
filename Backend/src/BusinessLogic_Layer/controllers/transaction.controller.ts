@@ -64,6 +64,8 @@ class TransactionController {
       const transaction = await this.transactionService.addTransaction({ ...req.body, userId: user.id });
       res.status(201).json(transaction);
     } catch (err: unknown) {
+      console.error("Error adding transaction:", (err as Error).message); // ← add this
+
         res.status(500).json({ error: (err as Error).message });
       }
   }

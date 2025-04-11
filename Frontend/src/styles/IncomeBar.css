@@ -1,0 +1,57 @@
+Container for the bar chart
+.income-bar-container {
+    width: 100%;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .income-bar-container h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+  }
+  
+  /* The bar chart styling */
+  .bar-chart {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .chartjs-render-monitor {
+    background: linear-gradient(45deg, #ff66b2, #9b59b6); /* Pink to Purple Gradient */
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .chart-container {
+    position: relative;
+  }
+  
+  /* Tooltip styling */
+  .chartjs-tooltip {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Responsive behavior */
+  @media (max-width: 768px) {
+    .income-bar-container {
+      padding: 15px;
+    }
+  
+    .bar-chart {
+      width: 90%;
+    }
+  }
+  

@@ -52,4 +52,13 @@ async getMaxExpense( queryParams: Record<string, any> = {}): Promise<number> {
   console.log(response);
   return response.data.maxExpense;
 },
+
+//updates
+
+// Fetch income data by source
+async getIncomeBySource() {
+  const response = await api.get('/income-by-source');
+  console.log(response);
+  return response.data.incomeSources; // Assuming incomeSources is an array of { category, total }
+},
 };

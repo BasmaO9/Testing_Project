@@ -6,6 +6,7 @@ import '../styles/dashbored.css';
 import { visService } from "../services/card.service";
 import { Transaction } from '../types/transaction';
 import { transactionsService } from '../services/transactions.service';
+import IncomeBar from '../components/IncomeBar';
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
 import { Pie, Line } from 'react-chartjs-2';
@@ -171,6 +172,11 @@ const DashboardPage: React.FC = () => {
                 <h3>Income vs Expenses</h3>
                 {totalIncomeAndExpenses ? <Pie data={pieData} /> : <p>Loading Chart...</p>}
               </div>
+              <div className="income-bar">
+              {/* <h3>Income by Source</h3> */}
+              {/* Use IncomeBar component, no need for incomeData or chartData */}
+              <IncomeBar />
+            </div>
               <div className="cards-section">
                 <h3>Your Financial Highlights</h3>
                 <div className="cards-container">

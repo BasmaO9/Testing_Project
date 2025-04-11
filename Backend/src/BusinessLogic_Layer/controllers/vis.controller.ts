@@ -142,6 +142,21 @@ class VisController {
         }
     }
 //=================================================================================================
+//updates
 
+async getIncomeBySource(req: Request & { user?: JwtPayload }, res: Response): Promise<void> {
+    try {
+        const userId = req.user?.id;
+        if (!userId) {
+             res.status(401).json({ error: "Sorry Unauthorized :(" });
+             return;
+        }
+
+        const incomeSources = await this.visService.getIncomeBySource(userId);
+        res.status(200).json({ incomeSources });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+}
 }
 export default VisController; 
