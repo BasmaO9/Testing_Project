@@ -10,7 +10,6 @@ import visRouter from './BusinessLogic_Layer/routes/vis.routes';
 import CategoryRouter from './BusinessLogic_Layer/routes/category.routes';
 
 import cors from 'cors'; 
-
 let express = require('express');
 let connectDB = require('./Database_Layer/configdb');
 import swaggerUi from 'swagger-ui-express';
@@ -55,7 +54,6 @@ app.use('/budgets', BudgetRouter);
 app.use('/transactions', TransactionRouter);
 app.use('/analytics', visRouter);
 app.use('/category', CategoryRouter);
-
 
 // Start the server
 app.listen(PORT, () => {

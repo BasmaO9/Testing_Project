@@ -7,9 +7,11 @@ export const GenerateRecommendation = () => {
   const [recommendation, setRecommendation] = useState<String>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   
   function handleClick(){
+    setShowModal(true);
     setRecommendation('');
     setLoading(true);
     setError('');
@@ -27,25 +29,37 @@ export const GenerateRecommendation = () => {
     GenerateRecommendation();
   }
 
+  const closeModal = () => setShowModal(false);
+
 //   if (loading) return <LoadingSpinner />;
 //   if (error) return <p>{error}</p>;
 
   return (
     <div className='recomendation'>
-    <div className="recommendation-container">
-      <h2 className="recommendation-header">New Recommendation!</h2>
-      <button className="recommendation-button" onClick={handleClick}>
-        Generate a New Recommendation ✨
-      </button>
-      {loading && <p className="loading-text">Generating a recommendation...</p>}
-      {error && <p className="error-text">{error}</p>}
-      {recommendation && (
-        <div className="recommendation-data">
-          <h2>Recommends:</h2>
-          <p className='text'>{JSON.stringify(recommendation, null, 2)}</p>
+      <div className="recommendation-container">
+        {/* <h2 className="recommendation-header">New Recommendation!</h2> */}
+        <button className="recommendation-button" onClick={handleClick}>
+          Generate a New Recommendation ✨
+        </button>
+      </div>
+        {showModal && (
+      <div className="modal-overlay" onClick={closeModal}>
+        <div className="modal-popup" onClick={e => e.stopPropagation()}>
+          <button className="close-btn" onClick={closeModal}>&times;</button>
+          <h3>Recommendation</h3>
+          <div className="model-text">
+            {loading && <p className="loading-text">Generating a recommendation...</p>}
+            {error && <p className="error-text">{error}</p>}
+            {recommendation && (
+              <div className="recommendation-data">
+                <p className='text'>{JSON.stringify(recommendation, null, 2)}</p> 
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
+      </div>
+    )}
+
     </div>
 
 

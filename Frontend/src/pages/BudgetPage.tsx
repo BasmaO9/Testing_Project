@@ -10,22 +10,21 @@ const RecommendationPage = () => {
   return (
     <div className='budget'>
       <Layout> </Layout>
-    <div className="budget-container">
-  <div className="top-section">
-    <ShowBudget />
-  </div>
-  
-  <div className="bottom-section">
-    <div className="left-section">
-       <GenerateRecommendation /> 
+      <div className="budget-container">
+        <div className="top-section">
+          <ShowBudget />
+        </div>
+      
+        <div className="bottom-section">
+            <div className="left-section">
+            <ShowRecommendations />
+
+            </div>
+           
+          
+        </div>
+      </div>
     </div>
-    
-    <div className="right-section">
-          <ShowRecommendations />
-    </div>
-  </div>
-</div>
-</div>
   )
 }
 

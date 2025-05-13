@@ -1,7 +1,6 @@
 import { ChangeEvent, Suspense, useEffect, useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorBoundary from './ErrorBoundary';
-import { recommendationService } from '../services/recommendation.service';
 import { Budget } from '../types/budget';
 import { budgetService } from '../services/budget.service';
 import '../styles/budget.css'; // Adjust the path according to your folder structure
@@ -59,23 +58,27 @@ const ShowBudget = () => {
   return (
     <div className="budget">
       <div className="p-4">
-        <h2>Budgets</h2>
+        <div className="budget-title">
+            <h1>Budgets</h1>
+        </div>
         <div className="budget-grid">
           {currentBudgets.map((budget) => (
             <div key={budget._id} className="budget-item">
-              <div className="budget-image">
-                <img
-                  src={budget?.category?.category_img}
-                  alt="image"
-                  width="40"
-                  height="40"
-                />
-              </div>
-              <div className="budget-category">
-                Category: {budget?.category?.category}
+              <div className="budget-header">
+                <div className="budget-image">
+                  <img
+                    src={budget?.category?.category_img}
+                    alt="image"
+                    width="40"
+                    height="40"
+                  />
+                </div>
+                <div className="budget-category">
+                  <p>  Category: {budget?.category?.category}</p>
+                </div>
               </div>
               <div className="budget-value">
-                <strong>Limit: </strong>
+                <strong>Limit: {budget?.limit} $</strong>
                 <input
                   type="range"
                   min="1000"
@@ -84,8 +87,7 @@ const ShowBudget = () => {
                   onChange={(e) => handleSliderChange(e, budget._id)}
                   style={{ width: '100%' }}
                 />
-                <span>{budget?.limit}</span>
-
+                
                 <button onClick={(e) => handleSave(budget._id)}>
                   Save
                 </button>
@@ -94,7 +96,7 @@ const ShowBudget = () => {
                 </button>
               </div>
               <div className="budget-value">
-                <strong>Total Spent: </strong>{budget?.total_spent}
+                <strong>Total Spent: {budget?.total_spent} $</strong>
               </div>
             </div>
           ))}

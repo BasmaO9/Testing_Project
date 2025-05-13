@@ -201,6 +201,101 @@ html, body {
     text-align: center;
     font-size: 25px;
    }
+   .cards-section {
+    margin-top: 2rem;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    flex: 1 1 calc(30% - 1rem);
+    max-width: 300px;
+    min-width: 220px;
+    transition: all 0.3s ease;
+    color: #333;
+  }
+  
+  .card h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  .card p {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #4caf50;
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+  
+  .card:hover {
+    background-color: #007bff;
+    transform: translateY(-5px);
+  }
+  
+  .card:hover h4,
+  .card:hover p {
+    color: #fff;
+  }
+
+  /* Custom toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 26px;
+}
+
+/* Circle inside the slider */
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* When switch is checked */
+input:checked + .slider {
+  background-color: #36A2EB;
+}
+
+input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
   
   
   @media (max-width: 768px) {
@@ -210,4 +305,6 @@ html, body {
     }
   
   }
+
+  
   

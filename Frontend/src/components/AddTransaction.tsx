@@ -46,6 +46,9 @@ const AddTransaction: React.FC = () => {
     if (name === 'category') {
       const selectedCategory = categories.find((cat) => cat._id === value);
       setFormData({ ...formData, category: selectedCategory });
+    }else if (name === 'amount') {
+      // convert to number to avoid issues like "Infinity124124"
+      setFormData({ ...formData, amount: Number(value) });
     } else {
       setFormData({ ...formData, [name]: value });
     }

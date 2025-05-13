@@ -9,14 +9,17 @@ const api = axios.create({
 
 export const transactionsService = {
 
-  async getAllTransactions(filters?: TransactionFilters): Promise<Transaction[]> {
+  async getAllTransactions(filters?: TransactionFilters & { month?: string; year?: string }): Promise<Transaction[]> {
     const params = new URLSearchParams();
     if (filters?.date) params.append('date', filters.date);
     if (filters?.category) params.append('category', filters.category);
-
+    if (filters?.month) params.append('month', filters.month);
+    if (filters?.year) params.append('year', filters.year);
+  
     const response = await api.get<Transaction[]>('/transactions', { params });
     return response.data;
   },
+  
 
   async getTransactionById(id: string): Promise<Transaction> {
     const response = await api.get<Transaction>(`/transactions/${id}`);

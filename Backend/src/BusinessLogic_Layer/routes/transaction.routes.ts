@@ -3,7 +3,9 @@ import express from 'express'
 import TransactionController from "../controllers/transaction.controller";
 import TransactionService from "../services/transaction.service";
 import authenticateToken from '../Middleware/AuthMiddleware';
-
+import multer from 'multer';
+import * as path from 'path';
+const upload = multer({ dest: path.join(__dirname, "../../uploads/") });
 const router = express.Router();
 
 const transactionService = new TransactionService();
@@ -21,5 +23,6 @@ router.post("/", authenticateToken, (req,res)=> transactionController.addTransac
 // Route to delete a transaction by ID for the authenticated user
 router.delete("/:id", authenticateToken, (req,res)=> transactionController.deleteTransaction(req,res));
 
-
+// Existing transaction routes...
+router.post("/scan", authenticateToken, upload.single("receipt"), (req, res) => transactionController.scanReceipt(req, res));
 export default router;

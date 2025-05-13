@@ -3,6 +3,7 @@ import { Recommendation } from '../types/recommendation';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorBoundary from './ErrorBoundary';
 import { recommendationService } from '../services/recommendation.service';
+import GenerateRecommendation from './GenerateRecommendation';
 
 const ShowRecommendations = () => {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
@@ -52,15 +53,18 @@ const ShowRecommendations = () => {
   return (
     <div className="p-4">
       <h2>Recommendations</h2>
-      <table style={{maxWidth:500}}> 
+      <table className="recommendations-table" style={{maxWidth:1200}}> 
         <tbody>
           {currentRecommendations.map((recommendation) => (
             <tr key={recommendation._id}>
-              <td>{recommendation.text}<br/><br/></td>
+              <td className="recommendation-text">{recommendation.text}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className="generate-rec">
+        <GenerateRecommendation /> 
+      </div>
       <div className='pagination'>
         <button onClick={handlePreviousPage} disabled={currentPage === 1}> Previous </button>
         <span>
