@@ -1,27 +1,38 @@
 import { ChangeEvent, Suspense, useEffect, useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 import ErrorBoundary from './ErrorBoundary';
-import { recommendationService } from '../services/recommendation.service';
 import { Budget } from '../types/budget';
 import { budgetService } from '../services/budget.service';
-import '../styles/budget.css'; // Adjust the path according to your folder structure
+import '../styles/budget.css';
 
 const ShowBudget = () => {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;  // Set the number of budgets per page
+  const itemsPerPage = 3;
 
-  let handleSave = async (id: string | undefined) => {
-    let budgetUpdated = budgets.filter((bud) => bud._id === id);
-    const response = await budgetService.updateBudget(id as string, budgetUpdated[0]);
-    console.log(response);
+  const handleSave = async (id: string | undefined) => {
+    if (!id) return;
+    try {
+      const budgetUpdated = budgets.find((bud) => bud._id === id);
+      if (budgetUpdated) {
+        await budgetService.updateBudget(id, budgetUpdated);
+        // Optionally add toast notification here
+        console.log('Budget updated successfully');
+      }
+    } catch (error) {
+      console.error('Error updating budget:', error);
+    }
   };
 
-  let handleCancel = async () => {
-    const response = await budgetService.getBudgets();
-    setBudgets(response as Budget[]);
+  const handleCancel = async () => {
+    try {
+      const response = await budgetService.getBudgets();
+      setBudgets(response as Budget[]);
+    } catch (error) {
+      console.error('Error fetching budgets:', error);
+    }
   };
 
   useEffect(() => {
@@ -30,7 +41,7 @@ const ShowBudget = () => {
         const response = await budgetService.getBudgets();
         setBudgets(response as Budget[]);
       } catch (error) {
-        setError('Error loading recommendations');
+        setError('Error loading budgets');
       } finally {
         setLoading(false);
       }
@@ -42,16 +53,15 @@ const ShowBudget = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
-  function handleSliderChange(e: ChangeEvent<HTMLInputElement>, _id: string | undefined): void {
-    let temp = budgets;
-    temp = temp.map((budget) => {
-      if (budget._id === _id) return { ...budget, limit: +e.target.value };
-      else return budget;
-    });
-    setBudgets(temp);
-  }
+  const handleSliderChange = (e: ChangeEvent<HTMLInputElement>, _id: string | undefined): void => {
+    if (!_id) return;
+    setBudgets((prevBudgets) =>
+      prevBudgets.map((budget) =>
+        budget._id === _id ? { ...budget, limit: +e.target.value } : budget
+      )
+    );
+  };
 
-  // Pagination Logic: Determine the budgets to show for the current page
   const indexOfLast = currentPage * itemsPerPage;
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentBudgets = budgets.slice(indexOfFirst, indexOfLast);
@@ -59,56 +69,52 @@ const ShowBudget = () => {
   return (
     <div className="budget">
       <div className="p-4">
-        <h2>Budgets</h2>
+        <div className="budget-title">
+          <h1>Budgets</h1>
+        </div>
         <div className="budget-grid">
           {currentBudgets.map((budget) => (
             <div key={budget._id} className="budget-item">
-              <div className="budget-image">
-                <img
-                  src={budget?.category?.category_img}
-                  alt="image"
-                  width="40"
-                  height="40"
-                />
-              </div>
-              <div className="budget-category">
-                Category: {budget?.category?.category}
+              <div className="budget-header">
+                <div className="budget-image">
+                  <img
+                    src={budget?.category?.category_img}
+                    alt={budget?.category?.category || 'Category'}
+                    width="50"
+                    height="50"
+                  />
+                </div>
+                <div className="budget-category">
+                  <p>Category: {budget?.category?.category}</p>
+                </div>
               </div>
               <div className="budget-value">
-                <strong>Limit: </strong>
+                <strong>Limit: ${budget?.limit?.toLocaleString()}</strong>
                 <input
                   type="range"
                   min="1000"
                   max="200000"
-                  value={"" + budget.limit}
+                  value={budget.limit}
                   onChange={(e) => handleSliderChange(e, budget._id)}
                   style={{ width: '100%' }}
                 />
-                <span>{budget?.limit}</span>
-
-                <button onClick={(e) => handleSave(budget._id)}>
-                  Save
-                </button>
-                <button onClick={handleCancel}>
-                  Cancel
-                </button>
+                <button onClick={() => handleSave(budget._id)}>Save</button>
+                <button onClick={handleCancel}>Cancel</button>
               </div>
               <div className="budget-value">
-                <strong>Total Spent: </strong>{budget?.total_spent}
+                <strong>Total Spent: ${budget?.total_spent?.toLocaleString()}</strong>
               </div>
             </div>
           ))}
         </div>
-
-        {/* Pagination Controls */}
         <div className="pagination">
           <button
             onClick={() => setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            Prev
+            Previous
           </button>
-          <span>Page {currentPage}</span>
+          <span>Page {currentPage} of {Math.ceil(budgets.length / itemsPerPage)}</span>
           <button
             onClick={() => setCurrentPage(currentPage + 1)}
             disabled={indexOfLast >= budgets.length}
@@ -121,14 +127,4 @@ const ShowBudget = () => {
   );
 };
 
-export default function App() {
-  return (
-    <div>
-      <ErrorBoundary fallback={<p>Error loading budgets. Please try again later.</p>}>
-        <Suspense fallback={<LoadingSpinner />}>
-          <ShowBudget />
-        </Suspense>
-      </ErrorBoundary>
-    </div>
-  );
-}
+export default ShowBudget;

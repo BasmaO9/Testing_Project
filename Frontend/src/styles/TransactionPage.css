@@ -6,6 +6,7 @@
 }
 
 html, body {
+  height: 100%;
   overflow-y: auto;
   font-family: Arial, sans-serif;
 }
@@ -13,48 +14,67 @@ html, body {
 /* Transaction Page Styles */
 .transaction-page {
   width: 100%;
-  padding: 0%;
-  min-height: 100vh;
+  padding: 20px;
+  min-height: calc(100vh - 60px); /* Account for any headers/layout spacing */
+  background-color: var(--bg-page);
+  overflow-y: auto;
 }
 
 .transaction-page h1 {
   text-align: center;
-  color: #4b2c7f; /* Soft pastel purple */
+  color: #4b2c7f;
   margin-bottom: 30px;
+  font-size: 32px;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-page);
+  padding: 20px 0;
+  z-index: 10;
 }
 
 .transaction-container {
-
   display: flex;
   justify-content: space-between;
-  gap: 30px; /* Space between Add and List */
+  gap: 30px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  height: calc(100vh - 150px); /* Adjust based on header height */
+  overflow-y: auto;
 }
 
 .add {
-  width: 48%; /* Adjust width to fit both sections side by side */
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  height: fit-content;
 }
 
 .list {
-  width: 48%;
+  flex: 1.5;
+  min-width: 600px;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 /* Add Transaction Styles */
 .add-transaction-container {
   display: flex;
   justify-content: center;
+  position: sticky;
+  top: 0;
 }
 
 .add-transaction {
-  background: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   padding: 30px;
   width: 100%;
-  max-width: 500px;
   color: #333;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: popIn 0.5s ease;
-  overflow-y: auto;
 }
 
 /* Pop In Animation */
@@ -62,8 +82,6 @@ html, body {
   0% { transform: scale(0.9); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
-
-
 
 .form-header {
   text-align: center;
@@ -74,7 +92,8 @@ html, body {
 
 /* Transaction List Styles */
 .transactionlist {
-  width: 650px;
+  width: 100%;
+  max-width: 650px;
   margin: 0 auto;
 }
 
@@ -83,12 +102,15 @@ html, body {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 .transaction-list-container {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px 10px; 
+  padding: 30px 10px;
   animation: popIn 0.5s ease;
-
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .transaction-list-header {
@@ -97,6 +119,11 @@ html, body {
   font-size: 28px;
   margin-bottom: 20px;
   border-radius: 100px;
+  position: sticky;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 15px 0;
+  z-index: 5;
 }
 
 .filters-container {
@@ -104,6 +131,11 @@ html, body {
   display: flex;
   justify-content: space-between;
   gap: 15px;
+  position: sticky;
+  top: 70px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 10px 0;
+  z-index: 5;
 }
 
 .filters-select {
@@ -121,21 +153,26 @@ html, body {
 }
 
 .transaction-table-container {
-  margin-top: 30px;
+  margin-top: 20px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .transaction-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .transaction-table-header th {
   background-color: #6c63ff;
   color: white;
-  padding: 20px;
+  padding: 15px;
   text-align: left;
   font-size: 16px;
-
+  position: sticky;
+  top: 0;
+  z-index: 4;
 }
 
 .transaction-table-body tr {
@@ -256,4 +293,77 @@ html, body {
 .pagination-page {
   font-size: 16px;
   color: #333;
+}
+
+/* Custom Scrollbar Styling */
+.transaction-container::-webkit-scrollbar,
+.list::-webkit-scrollbar,
+.transaction-table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transaction-container::-webkit-scrollbar-track,
+.list::-webkit-scrollbar-track,
+.transaction-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.transaction-container::-webkit-scrollbar-thumb,
+.list::-webkit-scrollbar-thumb,
+.transaction-table-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.transaction-container::-webkit-scrollbar-thumb:hover,
+.list::-webkit-scrollbar-thumb:hover,
+.transaction-table-container::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .transaction-container {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .add, .list {
+    width: 100%;
+    max-width: 800px;
+    min-width: auto;
+  }
+
+  .list {
+    margin-top: 30px;
+    height: 600px; /* Fixed height for scrollable list on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .transaction-page {
+    padding: 10px;
+  }
+
+  .transaction-container {
+    padding: 10px;
+  }
+
+  .transaction-page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    gap: 10px;
+    position: static;
+  }
+
+  .transaction-table-container {
+    overflow-x: auto;
+  }
 }

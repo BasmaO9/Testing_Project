@@ -5,6 +5,8 @@ import Budget from '../../Database_Layer/models/budget.schema';
 import User from '../../Database_Layer/models/user.schema';
 import Category from "../../Database_Layer/models/category.schema";
 import moment from 'moment';
+import * as Tesseract from 'tesseract.js';
+import * as fs from 'fs';
 
 // solid/clean code paradigms used =>
 
@@ -27,23 +29,35 @@ private isValidObjectId(id: string): boolean {
   }
 
   async getAllTransactions(userId: string, queryParams: any) {
-    let filter: Record<string, any> = { userId }; // Base filter for the user
+    let filter: Record<string, any> = { userId }; // Base filter
   
-    // Apply date filter if provided
-    if (queryParams.date) {
+    // Filter by month and year (if both provided)
+    if (queryParams.month && queryParams.year) {
+      const year = parseInt(queryParams.year);
+      const month = parseInt(queryParams.month) - 1;
+  
+      const startDate = new Date(year, month, 1);
+      const endDate = new Date(year, month + 1, 1);
+  
+      filter.date = { $gte: startDate, $lt: endDate };
+    }
+  
+    // Filter by relative date range (optional)
+    else if (queryParams.date) {
       filter.date = { $gte: this.getStartDate(queryParams.date) };
     }
   
-    // Apply category filter if provided
+    // Filter by category name (optional)
     if (queryParams.category) {
       const categoryFilter = await this.getCategoryFilter(queryParams.category);
       if (categoryFilter) {
-        filter.category = { $in: categoryFilter }; // Match ObjectId(s) of categories
+        filter.category = { $in: categoryFilter };
       }
     }
   
     return await this.transactionModel.find(filter).populate('category');
   }
+  
   
   // Single responsibility: Extract logic to calculate start date
   private getStartDate(dateRange: string): Date {
@@ -163,6 +177,85 @@ private isValidObjectId(id: string): boolean {
   }
 
 
+  
+  async processReceipt(filePath: string, userId: string) {
+    const { data: { text } } = await Tesseract.recognize(filePath, 'eng');
+    fs.unlinkSync(filePath); // delete temp file
+
+    const extracted = this.extractData(text);
+    if (!extracted.total || isNaN(extracted.total)) {
+      throw new Error("Failed to extract a valid total amount.");
+    }
+
+    return {
+      amount: extracted.total,
+      date: extracted.date || new Date()
+    };
+  }
+
+  private extractData(text: string) {
+    const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+    const fullText = lines.join(" ");
+
+    const priceRegex = /(\$|RM)?\s?(\d{1,3}(?:[.,]\d{2}))/gi;
+    const dateRegexNumeric = /\b\d{2}[\/\-\.]\d{2}[\/\-\.]\d{2,4}\b/;
+    const dateRegexNamed = /\b\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{4}\b/i;
+    const dateTimeRegex = /\b\d{2}[\/\-\.]\d{2}[\/\-\.]\d{2,4} \d{1,2}:\d{2}(?::\d{2})?( ?(AM|PM))?\b/i;
+
+    const totalLine = lines.find(l =>
+      /(total\s+(rm)?|total\s+amt|nett total|net\s+total|total\s+payable|cash\s+tendered|amount\s+payable)/i.test(l) &&
+      priceRegex.test(l)
+    );
+
+    let total: number | undefined;
+    if (totalLine) {
+      const priceMatch = [...totalLine.matchAll(priceRegex)];
+      if (priceMatch.length > 0) {
+        const raw = priceMatch[priceMatch.length - 1][2].replace(",", ".");
+        total = parseFloat(raw);
+      }
+    }
+
+    if (!total) {
+      const allPrices = [...fullText.matchAll(priceRegex)].map(m => parseFloat(m[2].replace(",", ".")));
+      total = Math.max(...allPrices.filter(n => !isNaN(n)));
+    }
+
+    let rawDate: string | undefined;
+    const timeMatch = fullText.match(dateTimeRegex);
+    const namedMatch = fullText.match(dateRegexNamed);
+    const numericMatch = fullText.match(dateRegexNumeric);
+
+    if (timeMatch) rawDate = timeMatch[0];
+    else if (namedMatch) rawDate = namedMatch[0];
+    else if (numericMatch) rawDate = numericMatch[0];
+
+    let date: Date | undefined;
+
+    if (rawDate) {
+      const parts = rawDate.split(/[\/\-\. ]/);
+      if (parts.length >= 3 && parts[2].length === 4) {
+        const day = parseInt(parts[0]);
+        const month = isNaN(+parts[1]) ? this.monthToNumber(parts[1]) : parseInt(parts[1]) - 1;
+        const year = parseInt(parts[2]);
+        const hour = parts.length > 3 ? parseInt(parts[3]) : 0;
+        const minute = parts.length > 4 ? parseInt(parts[4]) : 0;
+        date = new Date(year, month, day, hour, minute);
+      } else {
+        date = new Date(rawDate);
+      }
+    }
+
+    return { total, date };
+  }
+
+  private monthToNumber(month: string): number {
+    const months = {
+      jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+      jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+    };
+    return months[month.toLowerCase().slice(0, 3) as keyof typeof months] ?? 0;
+  }
 }
 
 export default TransactionService;

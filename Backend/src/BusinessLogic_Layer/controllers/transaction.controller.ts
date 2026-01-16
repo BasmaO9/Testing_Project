@@ -64,6 +64,8 @@ class TransactionController {
       const transaction = await this.transactionService.addTransaction({ ...req.body, userId: user.id });
       res.status(201).json(transaction);
     } catch (err: unknown) {
+      console.error("Error adding transaction:", (err as Error).message); // ← add this
+
         res.status(500).json({ error: (err as Error).message });
       }
   }
@@ -86,6 +88,26 @@ class TransactionController {
     }
   }
 
+
+  
+  async scanReceipt(req: Request & { user?: JwtPayload }, res: Response) {
+    try {
+      const user = req.user;
+      if (!user || !user.id) {
+        res.status(401).json({ error: "User not authenticated or invalid token" });
+        return;
+      }
+  
+      if (!req.file) {
+        res.status(400).json({ error: "No file uploaded" });
+        return;
+      }
+  
+      const result = await this.transactionService.processReceipt(req.file.path, user.id);
+      res.status(200).json(result);
+    } catch (err: unknown) {
+      res.status(500).json({ error: (err as Error).message });
+    }}
 }
 
 export default TransactionController;

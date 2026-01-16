@@ -11,15 +11,10 @@ const ShowRecommendations = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 2;
 
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentRecommendations = recommendations.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentRecommendations = recommendations.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Pagination handlers
   const totalPages = Math.ceil(recommendations.length / itemsPerPage);
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -27,7 +22,6 @@ const ShowRecommendations = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
 
   useEffect(() => {
     const getRecommendations = async () => {
@@ -40,49 +34,35 @@ const ShowRecommendations = () => {
         setLoading(false);
       }
     };
-    
-    getRecommendations();
-  },[]);
 
-  
+    getRecommendations();
+  }, []);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p>{error}</p>;
 
   return (
     <div className="p-4">
-      <h2>Recommendations</h2>
-      <table style={{maxWidth:500}}> 
-        <tbody>
-          {currentRecommendations.map((recommendation) => (
-            <tr key={recommendation._id}>
-              <td>{recommendation.text}<br/><br/></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className='pagination'>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}> Previous </button>
+      <div className="recommendation-list">
+        {currentRecommendations.map((recommendation) => (
+          <div key={recommendation._id} className="recommendation-item">
+            <p className="recommendation-text">{recommendation.text}</p>
+          </div>
+        ))}
+      </div>
+      <div className="pagination">
+        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          Previous
+        </button>
         <span>
           Page {currentPage} of {totalPages}
         </span>
         <button onClick={handleNextPage} disabled={currentPage === totalPages}>
           Next
         </button>
-        </div >
       </div>
-   
+    </div>
   );
 };
 
-export default function App() {
-  return (
-    <div>
-      <ErrorBoundary fallback={<p>Error loading recommendations. Please try again later.</p>}>
-        <Suspense fallback={<LoadingSpinner />}>
-          <ShowRecommendations />
-        </Suspense>
-      </ErrorBoundary>
-    </div>
-  );
-}
+export default ShowRecommendations;

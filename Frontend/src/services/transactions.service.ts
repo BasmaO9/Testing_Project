@@ -1,18 +1,20 @@
+// services/transactions.service.ts
+
 import axios from 'axios';
-import { Transaction, TransactionFilters } from '../types/transaction';
-// import { API_BASE_URL } from '../config/api';
+import { Transaction, TransactionFilters, CreateTransactionDTO } from '../types/transaction';
 
 const api = axios.create({
   baseURL: 'http://localhost:3000',
-  withCredentials: true, // This is important for sending cookies with requests
+  withCredentials: true,
 });
 
 export const transactionsService = {
-
-  async getAllTransactions(filters?: TransactionFilters): Promise<Transaction[]> {
+  async getAllTransactions(filters?: TransactionFilters & { month?: string; year?: string }): Promise<Transaction[]> {
     const params = new URLSearchParams();
     if (filters?.date) params.append('date', filters.date);
     if (filters?.category) params.append('category', filters.category);
+    if (filters?.month) params.append('month', filters.month);
+    if (filters?.year) params.append('year', filters.year);
 
     const response = await api.get<Transaction[]>('/transactions', { params });
     return response.data;
@@ -23,13 +25,24 @@ export const transactionsService = {
     return response.data;
   },
 
-  async addTransaction(transaction: Omit<Transaction, '_id' | 'userId'>): Promise<Transaction> {
+  async addTransaction(transaction: CreateTransactionDTO): Promise<Transaction> {
     const response = await api.post<Transaction>('/transactions', transaction);
     return response.data;
   },
 
   async deleteTransaction(id: string): Promise<void> {
     await api.delete(`/transactions/${id}`);
+  },
+
+  async scanReceipt(file: File): Promise<{ amount: number; date: string }> {
+    const formData = new FormData();
+    formData.append('receipt', file);
+
+    const response = await api.post('/transactions/scan', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    return response.data;
   },
 };
 

@@ -1,209 +1,415 @@
-/* Global Styles */
+/* ===========================
+   budget.css — Dashboard‐Style UI
+   =========================== */
+
+/* ---------- Root Variables ---------- */
+:root {
+  --bg-page: #f7f5ff;           /* Light purple page background */
+  --bg-card: #ffffff;           /* White for cards/containers */
+  --text-default: #333333;      /* Dark gray text */
+  --text-muted: #6a4d9e;        /* Soft purple for secondary text */
+  --primary: #4b2c7f;           /* Deep purple accent */
+  --primary-hover: #3a2061;     /* Darker purple on hover */
+  --accent: rgba(255, 105, 180, 0.7); /* Soft pink for dividers / accents */
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --radius: 12px;               /* Slightly larger radius for modern look */
+  --transition: all 0.3s ease;  /* Smooth transitions */
+}
+
+/* ---------- Reset & Scroll ---------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', Arial, sans-serif; /* Use Inter for modern typography */
 }
 
-/* Scope the styles with .dashboard-page */
-html, body, .budget {
-  overflow-y: auto; /* Enable scrolling for the body */
+html, body {
+  height: 100%; /* Ensure full height for scrolling */
+  background-color: var(--bg-page);
+  color: var(--text-default);
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* Container for the entire page */
-.budget-container {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  margin: auto;
-  max-width: 1200px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow-y: auto;
-}
-
-/* Top section (for ShowBudget) */
-.top-section {
-  margin-bottom: 20px;
-  overflow-y: auto;
-}
-
-/* Bottom section (container for left and right sections) */
-.bottom-section {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;  /* Adds space between left and right sections */
-  overflow-y: auto;
-}
-
-/* Left section (for GenerateRecommendation) */
-.left-section {
-  flex: 1;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-}
-
-/* Right section (for ShowRecommendations) */
-.right-section {
-  flex: 1;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-}
-
-/* Budget Styles */
+/* ---------- Budget Wrapper & Centering ---------- */
 .budget {
-  padding: 10px;
-}
-
-.budget-container {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  margin: auto;
-  max-width: 1200px;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow-y: auto;
+  align-items: center;
+  padding: 30px; /* Increased padding */
+  background-color: var(--bg-page);
+  min-height: 60vh; /* Allow content to expand beyond viewport */
 }
 
+/* ---------- Main Container (Centered) ---------- */
+.budget-container {
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-light);
+  width: 90%; /* Slightly wider for better content fit */
+  max-width: 1280px; /* Larger max-width for modern screens */
+  padding: 30px; /* More padding for breathing room */
+  margin: 30px auto;
+  position: relative;
+  height: calc(100vh - 60px); /* Full viewport height minus margins */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* ---------- Top Section (Budgets Grid) ---------- */
+.top-section {
+  width: 100%;
+  margin-bottom: 10px; /* More spacing */
+}
+
+/* Title for Budgets */
+.budget-title h1 {
+  font-size: 32px; /* Larger title */
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* ---------- Grid of Budget Cards (Three Columns) ---------- */
 .budget-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px; /* More spacing between cards */
 }
 
 .budget-item {
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-light);
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
+  gap: 16px;
+  transition: var(--transition);
 }
 
-.budget-category,
-.budget-value {
-  font-size: 1rem;
+.budget-item:hover {
+  transform: translateY(-6px); /* Slightly more lift on hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-.budget-value {
-  display: block;
+/* Budget Card Header */
+.budget-header {
+  display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.budget-value input {
-  flex-grow: 1;
-  margin-right: 15px;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-.budget button{
-  background-color: #4caf50;
-  margin-top: 20px;
-  border-radius: 5px;
-  height: 60px;
-  border: none;
-  color: white;
-  padding: 8px 15px;
-  font-size: large ;
- 
-}
-
-.budget-value button {
-  padding: 8px 15px;
-  border: none;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 10px ;
-  width :70px;
-  font-size: small;
-  height: auto;
-}
-
-.budget-value button:hover {
-  background-color: #45a049;
+  gap: 12px;
 }
 
 .budget-image img {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-right: 15px;
+  object-fit: cover; /* Ensure images fit nicely */
 }
 
+.budget-category p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Budget Limits & Controls */
+.budget-value {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.budget-value strong {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  color: var(--text-default);
+}
+
+.budget-value input[type="range"] {
+  flex-grow: 1;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: #e0e0e0;
+  outline: none;
+  accent-color: var(--primary);
+  transition: var(--transition);
+}
+
+.budget-value input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.budget-value button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); /* Gradient button */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.budget-value button:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05); /* Subtle scale effect */
+}
+
+/* Total Spent Line */
+.budget-value + .budget-value {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+/* ---------- Pagination (Centered) ---------- */
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  align-items: center;
+  gap: 20px;
+  margin: 30px 0;
 }
 
 .pagination button {
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 0;
-  font-size: small;
-  height: auto;
+  transition: var(--transition);
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: scale(1.05);
 }
 
 .pagination button:disabled {
-  background-color: #d6d6d6;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.pagination button:hover {
-  background-color: #0056b3;
+.pagination span {
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
-
-/* Container for the recommendations section */
-.recommendation-container {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* ---------- Bottom Section (Recommendations) ---------- */
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 30px;
+  height: calc(100% - 50px); /* Take remaining height */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
-/* Title of the recommendations section */
+/* Left Section (Recommendations List) */
+.left-section {
+  flex: 2;
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 100%; /* Take full height of parent */
+}
+
 .recommendation-title {
-  font-size: 1.5rem;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 24px;
+  text-align: left;
 }
 
-/* List of recommendations */
 .recommendation-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
-/* Individual recommendation item */
 .recommendation-item {
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fafafa;
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: var(--transition);
+  font-size: 1.1rem;
+  color: var(--text-default);
 }
 
 .recommendation-item:hover {
-  background-color: #f1f1f1;
+  background-color: #f0f0f5;
+  transform: translateX(4px); /* Subtle slide effect */
+}
+
+/* Right Section (Generate Recommendation Button) */
+.right-section {
+  flex: 1;
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-light);
+  padding: 24px;
+  height: fit-content; /* Adjust height to content */
+  position: sticky;
+  top: 30px; /* Stick to top with some padding */
+}
+
+.generate-rec {
+  margin-top: 20px;
+}
+
+.recommendation-button {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.recommendation-button:hover {
+  background: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+/* ---------- Modal Overlay & Popup ---------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-popup {
+  background-color: var(--bg-card);
+  padding: 2rem;
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 700px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modal-popup pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-top: 1.2rem;
+  font-size: 1rem;
+}
+
+.model-text {
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 1.1rem;
+  color: var(--text-default);
+  line-height: 1.6;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  color: var(--primary);
+}
+
+/* ---------- Recommendation List Table (Bullet Style) ---------- */
+.recommendations-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.recommendations-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 1.1rem;
+  color: var(--text-default);
+}
+
+.recommendations-table td::before {
+  content: "• ";
+  color: var(--primary);
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+.recommendation-text {
+  font-size: 1rem;
+  color: var(--text-default); /* Use default text for better readability */
+  text-align: left;
+  line-height: 1.6;
+}
+
+/* ---------- Utilities ---------- */
+.p-4 {
+  align-self: center;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.budget-title {
+  padding: 12px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ---------- Responsive Fallbacks ---------- */
+@media (max-width: 1024px) {
+  .budget-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bottom-section {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .budget-container {
+    width: 95%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .budget-grid {
+    grid-template-columns: 1fr;
+  }
+  .budget-container {
+    padding: 16px;
+  }
+  .budget-title h1 {
+    font-size: 28px;
+  }
+  .recommendation-title {
+    font-size: 24px;
+  }
 }

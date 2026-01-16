@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 //dotenv.config();
 
 // Get the database URL from environment variables
-const dbURI: string = 'mongodb+srv://MRB:MARBN12@cluster0.83945.mongodb.net/financeTracker';
+const dbURI: string = 'mongodb+srv://MRB:Radwa234@cluster0.83945.mongodb.net/financeTracker';
 
 // Database connection function
 const connectDB = async (): Promise<void> => {

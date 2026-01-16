@@ -122,4 +122,54 @@ export class VisService {
         return transactions.reduce((sum, t) => sum + t.amount, 0); 
     }
 //=================================================================================================
+//updates
+
+async getIncomeBySource(userId: string, queryParams: any): Promise<{ category: string; total: number }[]> {
+    if (!userId) throw new Error("User ID is required");
+  
+    let matchStage: any = {
+      userId: new mongoose.Types.ObjectId(userId),
+      type: "income",
+    };
+  
+    // Add date filter based on month and year
+    if (queryParams.month && queryParams.year) {
+      const year = parseInt(queryParams.year);
+      const month = parseInt(queryParams.month) - 1; // JS months are 0-based
+  
+      const startDate = new Date(year, month, 1);
+      const endDate = new Date(year, month + 1, 1);
+  
+      matchStage.date = { $gte: startDate, $lt: endDate };
+    }
+  
+    const result = await Transaction.aggregate([
+      { $match: matchStage },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categoryInfo",
+        }
+      },
+      { $unwind: "$categoryInfo" },
+      {
+        $group: {
+          _id: "$categoryInfo.category",
+          total: { $sum: "$amount" },
+        },
+      },
+      {
+        $project: {
+          category: "$_id",
+          total: 1,
+          _id: 0,
+        },
+      },
+    ]);
+  
+    return result;
+  }
+  
 }

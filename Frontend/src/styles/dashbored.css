@@ -1,15 +1,23 @@
-/* Scope the styles with .dashboard-page */
+/* ======================================================
+   GLOBAL / RESET
+   ====================================================== */
 html, body {
-   
-    overflow-y: auto; /* Enable scrolling for the body */
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    /* Let <body> grow and scroll if needed */
 }
+
 .dashboard-page {
-    height: 100%;
     margin: 0;
     font-family: 'Arial', sans-serif;
-    overflow-y: auto; /* Enable scrolling for the body */
-  }
-  .confirmation-dialog {
+    /* No fixed height or overflow here—container will scroll */
+}
+
+/* ======================================================
+   CONFIRMATION DIALOG (UNCHANGED)
+   ====================================================== */
+.confirmation-dialog {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -19,134 +27,318 @@ html, body {
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .confirmation-dialog button {
+}
+
+.confirmation-dialog button {
     margin: 10px;
     padding: 10px 20px;
     cursor: pointer;
-  }
-  
-  .confirmation-dialog button:first-child {
+}
+
+.confirmation-dialog button:first-child {
     background-color: green;
     color: white;
-  }
-  
-  .confirmation-dialog button:last-child {
+}
+
+.confirmation-dialog button:last-child {
     background-color: red;
     color: white;
-  }
-  
-  .dashboard-container {
+}
+
+/* ======================================================
+   DASHBOARD CONTAINER (CENTERED + SCROLLABLE)
+   ====================================================== */
+.dashboard-container {
+    /* Appearance */
     padding: 20px;
     background-color: #f7f5ff; /* Light purple background */
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    width: 80%;
+
+    /* Center horizontally and fill viewport vertically */
     position: absolute;
     top: 0;
-    left: 150px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;           /* Adjust as needed (e.g. 75%, 90%) */
+    max-width: 1200px;    /* Caps the width on large screens */
+
+    /* THIS enables internal vertical scrolling */
     overflow-y: auto;
-  }
-  
-  .dashboard-page .profile-section {
+    overflow-x: hidden;
+}
+
+/* On very narrow screens, adjust left/right margins to avoid overflow */
+@media (max-width: 768px) {
+    .dashboard-container {
+        width: 95%;
+        transform: translateX(-47.5%); /* (100% − 95%) ÷ 2 = 2.5% shift */
+    }
+}
+
+/* ======================================================
+   PROFILE SECTION (HEADER)
+   ====================================================== */
+.dashboard-page .profile-section {
     background-color: #fff;
-    padding: 20px;
+    padding: 20px 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-  
-  .dashboard-page .profile-details {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-  }
-  
-  .dashboard-page .greeting {
-    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+.dashboard-page .profile-details h2 {
+    font-size: 28px;
     font-weight: bold;
     color: #4b2c7f; /* Purple color */
-  }
-  
-  .dashboard-page .profile-item {
+    margin: 0 0 10px;
+}
+
+.dashboard-page .profile-item,
+.dashboard-page .profile-details p {
     font-size: 16px;
     margin: 5px 0;
     color: #6a4d9e;
-  }
-  
-  .dashboard-page .error-message {
+}
+
+.dashboard-page .error-message {
     color: #ff4d4d;
     font-size: 14px;
     margin-bottom: 10px;
-  }
-  
-  .dashboard-page .divider-line {
+}
+
+.dashboard-page .profile-details button {
+    background-color: #4b2c7f;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.dashboard-page .profile-details button:hover {
+    background-color: #3a2061;
+}
+
+/* ======================================================
+   DIVIDER LINE
+   ====================================================== */
+.dashboard-page .divider-line {
     border: 0;
     height: 2px;
     background-color: rgba(255, 105, 180, 0.7); /* Soft pink */
-    margin: 20px 0;
-  }
-  
-  .dashboard-page .dashboard-content {
+    margin: 30px 0;
+}
+
+/* ======================================================
+   DASHBOARD CONTENT (FILTER + HEADLINE)
+   ====================================================== */
+.dashboard-page .dashboard-content {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.dashboard-page .dashboard-heading {
+    font-size: 28px;
+    color: #4b2c7f;
+    margin: 0 0 15px;
+}
+
+.dashboard-page .dashboard-description {
+    font-size: 16px;
+    color: #6a4d9e;
+}
+
+.dashboard-page .filter-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dashboard-page .filter-controls .switch {
+    margin-right: 10px;
+}
+
+.dashboard-page .filter-controls span {
+    font-size: 16px;
+    color: #333;
+}
+
+/* ======================================================
+   VISUALIZATION SECTION
+   ====================================================== */
+.visualization-section {
+    padding: 10px 0;
+}
+
+.visualization-section h2 {
+    margin: 0 0 20px;
+    text-align: center;
+    font-size: 26px;
+    color: #4b2c7f;
+}
+
+/* Container for pie chart, bar chart, and cards */
+.pie-and-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* ======================================================
+   PIE CHART AREA
+   ====================================================== */
+.pie {
+    flex: 1 1 40%;       /* Roughly 40% of the row */
+    min-width: 280px;    /* Don’t shrink smaller than 280px */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.pie h3 {
+    margin: 0 0 15px;
+    text-align: left;
+    font-size: 22px;
+    color: #6a4d9e;
+}
+
+/* ======================================================
+   INCOME BAR CHART AREA
+   ====================================================== */
+.income-bar {
+    flex: 1 1 55%;       /* Roughly 55% of the row */
+    min-width: 300px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.income-bar h3 {
+    margin: 0 0 15px;
+    text-align: left;
+    font-size: 22px;
+    color: #6a4d9e;
+}
+
+/* ======================================================
+   CARDS SECTION (below pie + bar)
+   ====================================================== */
+.cards-section {
+    flex: 1 1 100%;   /* Full width under the charts */
+    margin-top: 10px;
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.card {
+    background-color: #fff;
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    flex: 1 1 calc(30% - 1rem);
+    max-width: 280px;
+    min-width: 220px;
+    transition: all 0.3s ease;
+    color: #333;
+    text-align: center;
+}
+
+.card h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.card p {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #4caf50;
+    margin: 0;
+}
+
+.card:hover {
+    background-color: #4b2c7f;
+    transform: translateY(-5px);
+}
+
+.card:hover h4,
+.card:hover p {
+    color: #fff;
+}
+
+/* ======================================================
+   TRANSACTION LINE GRAPH
+   ====================================================== */
+.visualization-section > div:last-child {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-page .dashboard-heading {
-    font-size: 28px;
-    color: #4b2c7f; /* Purple color */
-  }
-  
-  .dashboard-page .dashboard-description {
-    font-size: 16px;
-    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.visualization-section h3 {
+    margin: 0 0 15px;
+    text-align: left;
+    font-size: 22px;
     color: #6a4d9e;
-  }
-  
-  .dashboard-page .love-message {
-    font-size: 18px;
-    color: #e7a1d9; /* Pinkish love message */
-    margin-top: 15px;
-  }
-  
-  .dashboard-page form {
+}
+
+/* ======================================================
+   FORM STYLING
+   ====================================================== */
+.dashboard-page form {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
     width: 80%;
-  }
-  
-  .dashboard-page form div {
+}
+
+.dashboard-page form div {
     margin-bottom: 15px;
-  }
-  
-  .dashboard-page form label {
+}
+
+.dashboard-page form label {
     font-size: 16px;
     color: #4b2c7f;
     display: block;
     margin-bottom: 5px;
-  }
-  
-  .dashboard-page form input {
+}
+
+.dashboard-page form input {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
     font-size: 16px;
     color: #333;
-  }
-  
-  .dashboard-page form input:focus {
+}
+
+.dashboard-page form input:focus {
     outline: none;
     border-color: #4b2c7f;
-  }
-  
-  .dashboard-page form button {
+}
+
+.dashboard-page form button {
     background-color: #4b2c7f;
     color: #fff;
     padding: 10px 20px;
@@ -155,13 +347,16 @@ html, body {
     font-size: 16px;
     cursor: pointer;
     margin-right: 10px;
-  }
-  
-  .dashboard-page form button:hover {
+}
+
+.dashboard-page form button:hover {
     background-color: #3a2061;
-  }
-  
-  .dashboard-page button {
+}
+
+/* ======================================================
+   GENERIC BUTTON STYLING
+   ====================================================== */
+.dashboard-page button {
     background-color: #4b2c7f;
     color: #fff;
     padding: 10px 15px;
@@ -170,44 +365,90 @@ html, body {
     font-size: 16px;
     cursor: pointer;
     margin: 10px 10px;
-  }
-  
-  .dashboard-page button:hover {
-    background-color: #3a2061;
-  }
-  
-  .dashboard-page button[type="button"] {
-    background-color: #ccc;
-  }
-  
-  .dashboard-page button[type="button"]:hover {
-    background-color: #b0b0b0;
-  }
-  .visualization-section {
-    padding: 10px 0px;
-  }
-  
-   .pie{
-    width: 30%;
-   }
+}
 
-   .visualization-section h3 {
-    margin: 20px;
-    text-align: left;
-    font-size: 25px;
-   }
-   .visualization-section h2 {
-    margin: 2px;
-    text-align: center;
-    font-size: 25px;
-   }
-  
-  
-  @media (max-width: 768px) {
-    .dashboard-container {
-      width: 95%;
-      left: 10px;
+.dashboard-page button:hover {
+    background-color: #3a2061;
+}
+
+.dashboard-page button[type="button"] {
+    background-color: #ccc;
+}
+
+.dashboard-page button[type="button"]:hover {
+    background-color: #b0b0b0;
+}
+
+/* ======================================================
+   TOGGLE SWITCH STYLING
+   ====================================================== */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 26px;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #36A2EB;
+}
+
+input:checked + .slider::before {
+    transform: translateX(24px);
+}
+
+/* ======================================================
+   RESPONSIVE BREAKPOINTS
+   ====================================================== */
+@media (max-width: 992px) {
+    /* Stack pie/bar vertically on medium screens */
+    .pie-and-cards-container {
+        flex-direction: column;
     }
-  
-  }
-  
+
+    .pie,
+    .income-bar,
+    .cards-section {
+        flex: 1 1 100%;
+        min-width: auto;
+    }
+
+    .card {
+        flex: 1 1 45%;
+        max-width: 45%;
+    }
+}
+
+@media (max-width: 600px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

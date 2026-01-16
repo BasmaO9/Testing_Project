@@ -8,6 +8,8 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState(''); // For registration
   const [phone, setPhone] = useState(''); // For registration
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const [securityAnswer, setSecurityAnswer] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [isRegistering, setIsRegistering] = useState(false); // To toggle between login and registration
@@ -21,7 +23,7 @@ export const Login = () => {
 
       setError('');
       setMessage(response.message);
-      navigate('/dashboard');
+      navigate('/security-question');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Something went wrong');
     }
@@ -30,7 +32,14 @@ export const Login = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const params = { name, email, phone, password };
+      const params = { 
+        name, 
+        email, 
+        phone, 
+        password,
+        securityQuestion,
+        securityAnswer 
+      };
       const response = await registerService.Register(params);
 
       setError('');
@@ -66,6 +75,29 @@ export const Login = () => {
                   id="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  required
+                  className="input-field"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="securityQuestion">Security Question:</label>
+                <input
+                  type="text"
+                  id="securityQuestion"
+                  value={securityQuestion}
+                  onChange={(e) => setSecurityQuestion(e.target.value)}
+                  required
+                  className="input-field"
+                  placeholder="e.g., What was your first pet's name?"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="securityAnswer">Security Answer:</label>
+                <input
+                  type="text"
+                  id="securityAnswer"
+                  value={securityAnswer}
+                  onChange={(e) => setSecurityAnswer(e.target.value)}
                   required
                   className="input-field"
                 />

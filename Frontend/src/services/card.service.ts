@@ -9,9 +9,9 @@ const api = axios.create({
 // Service for Visualization data
 export const visService = {
   // Fetch total income and expenses for the pie chart
-  async getTotalIncomeAndExpenses() {
-    const incomeResponse = await api.get('/total-income');
-    const expensesResponse = await api.get('/total-expenses');
+  async getTotalIncomeAndExpenses(queryParams: Record<string, any> = {}) {
+    const incomeResponse = await api.get('/total-income', { params: queryParams });
+    const expensesResponse = await api.get('/total-expenses', { params: queryParams });  
     return {
       income: incomeResponse.data.income,
       expenses: expensesResponse.data.expenses,
@@ -51,5 +51,14 @@ async getMaxExpense( queryParams: Record<string, any> = {}): Promise<number> {
   const response = await api.get(`/max-expense`, { params: {  ...queryParams } });
   console.log(response);
   return response.data.maxExpense;
+},
+
+//updates
+
+// Fetch income data by source
+async getIncomeBySource(queryParams: Record<string, any> = {}) {
+  const response = await api.get('/income-by-source', { params: queryParams });
+  console.log(response);
+  return response.data.incomeSources; // Assuming incomeSources is an array of { category, total }
 },
 };

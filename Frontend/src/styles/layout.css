@@ -1,83 +1,275 @@
+/* ===========================
+   layout.css — Dashboard Layout
+   =========================== */
+
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Layout */
-  .layout {
-    display: flex;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+/* Root Variables (aligned with budget.css) */
+:root {
+  --bg-page: #f7f5ff;
+  --bg-card: #ffffff;
+  --text-default: #333333;
+  --text-muted: #6a4d9e;
+  --primary: #4b2c7f;
+  --primary-hover: #3a2061;
+  --accent: rgba(255, 105, 180, 0.7);
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+/* Ensure full page scrollability */
+html, body {
+  height: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background-color: var(--bg-page);
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  flex-direction: column; /* Stack sidebar and content vertically if needed */
+  min-height: 100vh; /* Allow content to expand beyond viewport */
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+  min-height: 100vh; /* Ensure main content can expand */
+}
+
+/* Sidebar offset */
+.main-content.sidebar-open {
+  margin-left: 250px;
+}
+
+/* Sidebar */
+.sidebar {
+  z-index: 100;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.visible {
+  left: 0;
+}
+
+.sidebar-list {
+  margin-top: 40px;
+  list-style: none;
+  padding: 20px;
+}
+
+.sidebar-item {
+  padding: 15px 20px;
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sidebar-item:hover {
+  background: var(--accent);
+  transform: translateX(5px);
+}
+
+/* Menu Icon */
+.menu-icon {
+  z-index: 101;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 28px;
+  color: var(--primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.menu-icon:hover {
+  color: var(--primary-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  /* Sidebar */
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Chat Button */
+.chat-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 102;
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+}
+
+.chat-button:hover {
+  transform: scale(1.1);
+}
+
+/* Chat Box */
+.chat-box {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 320px;
+  height: 420px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-light);
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Chat Header */
+.chat-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #fff;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Chat Body */
+.chat-body {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background-color: #fafafa;
+}
+
+/* Close Button */
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  color: var(--accent);
+}
+
+/* Chat Messages */
+.chat-message {
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  max-width: 85%;
+  word-wrap: break-word;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.chat-message.user {
+  background-color: var(--accent);
+  color: #fff;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.chat-message.bot {
+  background-color: #e0e0e0;
+  color: var(--text-default);
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+/* Chat Input */
+.chat-input-container {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #e0e0e0;
+  background-color: var(--bg-card);
+}
+
+.chat-input-container input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.chat-input-container button {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 22px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.chat-input-container button:hover {
+  color: var(--primary-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .sidebar {
-    z-index: 100;
-    background:rgba(223, 74, 162, 0.5);; ; /* Light pastel purple */
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: -250px;
-    transition: left 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    left: -200px;
   }
-  
-  .sidebar.visible {
-    z-index: 100;
-    left: 0;
+
+  .main-content.sidebar-open {
+    margin-left: 200px;
   }
-  
-  .sidebar-list {
-    margin-top: 30px;
-    list-style: none;
-    padding: 20px;
+
+  .chat-box {
+    width: 90%;
+    right: 5%;
+    bottom: 80px;
+    height: 380px;
   }
-  
-  .sidebar-item {
-    z-index: 100;
-    padding: 15px;
-    margin: 10px 0;
-    font-size: 18px;
-    color: #4b2c7f;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .sidebar-item:hover {
-    z-index: 100;
-    background: #ce93d8; /* Soft pastel lavender */
-    color: #fff;
-  }
-  
-  /* Menu Icon */
+
   .menu-icon {
-    z-index: 101;
-    position: fixed;
-    top: 20px;
-    left: 20px;
     font-size: 24px;
-    color: #fff;
-    cursor: pointer;
   }
-  
-  
-  /* Animations */
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .dashboard {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-  
+}

@@ -4,6 +4,7 @@ import TransactionPage from './pages/TransactionsPage';
 import BudgetPage from './pages/BudgetPage';
 import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
+import SecurityQuestion from './components/SecurityQuestion';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<LoginPage/>} /> 
+        <Route path="/security-question" element={<SecurityQuestion />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/transactions" element={<TransactionPage />} />
         <Route path="/recommendations" element={<BudgetPage />} />

@@ -2,33 +2,34 @@
 .recommendation-container {
     display: grid;
     grid-template-columns: 1fr; /* Single-column layout */
-    gap: 16px;
+    gap: 8px;
     padding: 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 600px; /* Restrict the width */
+    width: 100%; /* Take full width of parent */
     word-wrap: break-word; /* Prevent long words from overflowing */
-    overflow: hidden; /* Ensure no content spills out */
-  }
-  
-  .recommendation-container:hover {
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: 100%; /* Take full height of parent */
+}
+
+.recommendation-container:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Header for the recommendation section */
-  .recommendation-header {
+}
+
+/* Header for the recommendation section */
+.recommendation-header {
     font-size: 1.8rem;
     color: #333;
     margin-bottom: 16px;
     font-weight: 600;
-  }
-  
-  /* Button styles */
-  .recommendation-button {
+}
+
+/* Button styles */
+.recommendation-button {
     display: inline-block;
     padding: 10px 20px;
     font-size: 1rem;
@@ -39,34 +40,34 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .recommendation-button:hover {
+}
+
+.recommendation-button:hover {
     background-color: #0056b3;
-  }
-  
-  .recommendation-button:active {
+}
+
+.recommendation-button:active {
     background-color: #004080;
-  }
-  
-  /* Loading and error text */
-  .loading-text,
-  .error-text {
+}
+
+/* Loading and error text */
+.loading-text,
+.error-text {
     font-size: 1rem;
     text-align: center;
     margin: 10px 0;
-  }
-  
-  .loading-text {
+}
+
+.loading-text {
     color: #666;
-  }
-  
-  .error-text {
+}
+
+.error-text {
     color: #e74c3c;
-  }
-  
-  /* Recommendation data container */
-  .recommendation-data {
+}
+
+/* Recommendation data container */
+.recommendation-data {
     padding: 10px;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -78,19 +79,64 @@
     overflow-x: auto; /* Allow horizontal scrolling for long JSON strings */
     max-width: 100%; /* Ensure the data doesn't exceed the container width */
     box-sizing: border-box; /* Include padding and border in width calculation */
-  }
-  
-  /* Overall page container */
-  .page-container {
+}
+
+/* Overall page container */
+.page-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-  }
+    height: 100%;
+    overflow-y: auto; /* Enable vertical scrolling */
+}
 
-  p.text{
+/* Recommendation list container */
+.recommendation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: calc(100vh - 250px); /* Leave space for header and pagination */
+    padding-right: 8px; /* Add space for scrollbar */
+}
+
+/* Recommendation item */
+.recommendation-item {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.recommendation-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollbar styling */
+.recommendation-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.recommendation-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.recommendation-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.recommendation-list::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+p.text{
     color: #2e2c2c;
     font-family: monospace;
     font-size: 0.9rem;
-  }
+}
   
